@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Coloured Doors — Скачать</title>
+  <meta name="description" content="Скачать игру Coloured Doors — автоматически перенаправляет на App Store или Google Play" />
+  <!-- Apple Smart App Banner (показывается в Safari на iOS) -->
+  <meta name="apple-itunes-app" content="app-id=6449045010">
+  <style>
+    :root{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#111}
+    body{margin:0;display:flex;min-height:100vh;align-items:center;justify-content:center;background:#f7f7f8}
+    .card{max-width:520px;width:92%;background:#fff;padding:28px;border-radius:12px;box-shadow:0 6px 18px rgba(20,20,30,0.08);text-align:center}
+    h1{margin:0 0 8px;font-size:20px}
+    p{margin:0 0 18px;color:#4b5563}
+    .btn{display:inline-block;padding:12px 18px;margin:8px;border-radius:10px;text-decoration:none;font-weight:600;border:0;cursor:pointer}
+    .primary{background:#0b69ff;color:#fff}
+    .secondary{background:#eef2ff;color:#07123b;color:#07123b;border:1px solid #e6e9f8}
+    .hint{font-size:13px;color:#6b7280;margin-top:12px}
+    .manual{margin-top:14px;font-size:14px}
+    .store-links{display:flex;gap:10px;justify-content:center;margin-top:10px}
+    .store-links a{padding:10px 12px;border-radius:8px;border:1px solid #e6e9f8;text-decoration:none;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <h1>Coloured Doors</h1>
+    <p>Нажмите кнопку — мы попытаемся открыть страницу в магазине приложений.</p>
+
+    <button id="autoBtn" class="btn primary">Скачать</button>
+    <div class="manual">
+      <div class="hint">Если автоматический переход не сработал — используйте одну из кнопок ниже или откройте в браузере:</div>
+      <div class="store-links">
+        <a id="playBtn" href="https://play.google.com/store/apps/details?id=com.Polus.ColouredDoors" target="_blank" rel="noopener">Google Play</a>
+        <a id="appBtn" href="https://apps.apple.com/ru/app/coloured-doors/id6449045010" target="_blank" rel="noopener">App Store</a>
+      </div>
+      <div class="hint">Подсказка: в TikTok нажмите ⋯ (три точки) → "Open in browser" (Открыть в браузере), затем нажмите «Скачать».</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // Ваши ссылки
+      var playWeb = 'https://play.google.com/store/apps/details?id=com.Polus.ColouredDoors';
+      var appStore = 'https://apps.apple.com/ru/app/coloured-doors/id6449045010';
+      var packageName = 'com.Polus.ColouredDoors';
+
+      // Утилита для определения платформы
+      var ua = navigator.userAgent || navigator.vendor || window.opera || '';
+      function isAndroid(){ return /Android/i.test(ua); }
+      function isIOS(){ return /iPhone|iPad|iPod/i.test(ua); }
+
+      function tryOpenAndroid(){
+        // Попытка через intent:// (работает в большинстве Android-браузеров)
+        var intentUri = 'intent://details?id=' + packageName + '#Intent;package=com.android.vending;scheme=market;end';
+        var fallback = playWeb;
+
+        // 1) Сначала пробуем intent URI
+        window.location = intentUri;
+
+        // 2) Через 1100ms переводим на веб-версию (fallback), если intent заблокирован
+        setTimeout(function(){ window.location = fallback; }, 1100);
+      }
+
+      function tryOpenIOS(){
+        // Для iOS — прямой переход на App Store
+        window.location = appStore;
+      }
+
+      function openAppropriate(){
+        if (isAndroid()){
+          tryOpenAndroid();
+        } else if (isIOS()){
+          tryOpenIOS();
+        } else {
+          // Desktop — редирект на сайт или страницу игры
+          // Здесь можно заменить на свой сайт
+          window.location = 'https://polus.games';
+        }
+      }
+
+      // Кнопка ручного запуска
+      document.getElementById('autoBtn').addEventListener('click', function(e){
+        e.preventDefault();
+        openAppropriate();
+      });
+
+      // Также клики по явным ссылкам
+      document.getElementById('playBtn').addEventListener('click', function(){ /* открывается по href */ });
+      document.getElementById('appBtn').addEventListener('click', function(){ /* открывается по href */ });
+
+      // Попытка автоматического запуска при открытии страницы
+      // Комментарий: автоматический редирект может быть заблокирован WebView TikTok — поэтому кнопка обязательна
+      setTimeout(function(){ openAppropriate(); }, 500);
+
+    })();
+  </script>
+</body>
+</html>
